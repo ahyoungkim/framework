@@ -222,9 +222,16 @@ namespace Accord.IO
             for (int i = dimensions.Length - 1; i >= 0; i--)
                 dimensions[i] = reader.ReadInt32();
 
-            readBytes += dimensions.Length * 4;
-
-            readBytes += 8;
+            //=== 2019-11-04 Modifications for three dimensional processing.
+            readBytes += dimensions.Length * 8;
+            //readBytes += 8;
+            if (dimensions.Length > 2)
+            {
+                for (int i = 2; i < dimensions.Length; i++)
+                    reader.ReadInt32();
+            }
+            //===
+            
             MatDataTag nameTag;
             if (!reader.Read(out nameTag))
                 throw new NotSupportedException("Invalid name tag at position " + readBytes + ".");
